@@ -17,7 +17,7 @@ yarn add falconx-node
 # Quickstart
 
 ```javascript
-import FalconxClient from 'falconx';
+import FalconxClient from 'falconx-node';
 
 const fxClient = new FalconxClient(apiKey, secretKey, passphrase);
 fxClient.getQuote('ETH', 'USD', 0.1, 'two_way').then(quote => {
