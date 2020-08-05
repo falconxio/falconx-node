@@ -1,0 +1,31 @@
+{
+  "name": "falconx-node",
+  "version": "1.0.0",
+  "description": "REST client for FalconX APIs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint index.js --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/falconxio/falconx-node.git"
+  },
+  "author": "Anushree Chatterjee <anushree@falconx.io>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/falconxio/falconx-node/issues"
+  },
+  "homepage": "https://github.com/falconxio/falconx-node#readme",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "crypto-js": "^4.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.6.0",
+    "eslint-config-airbnb": "^18.2.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jsx-a11y": "^6.3.1",
+    "eslint-plugin-react": "^7.20.5"
+  }
+}
