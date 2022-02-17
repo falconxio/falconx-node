@@ -177,6 +177,9 @@ class FalconxClient {
         let baseMessage = timestamp + config.method.toUpperCase() + pathUrl;
         if (config.method === 'post' || Object.keys(config.data || {}).length > 0) {
           baseMessage += JSON.stringify(config.data);
+        } else {
+          // eslint-disable-next-line no-param-reassign
+          config.data = undefined;
         }
         const message = baseMessage;
         const hmacKey = CryptoJS.enc.Base64.parse(this.secretKey);
