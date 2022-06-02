@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/falconxio/falconx-node#readme",
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.2",
     "crypto-js": "^4.0.0"
   },
   "devDependencies": {
