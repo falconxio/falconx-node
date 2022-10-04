@@ -580,7 +580,7 @@ class FalconxClient {
      * @param {String} market_list: comma separated 'BTC-USD,ETH-USD'
      * @example {
         'status': "success",
-        'response': {
+        'response': [{
           'Trade ID': '12a29e52cfe745c4a4ee556f372ebce2',
           'Status': 'open',
           'Market': 'ETH - USD',
@@ -600,7 +600,7 @@ class FalconxClient {
           'Daily Mark': '-2.00 USD',
           'Delta': '-262.00',
           'Vega': '-272.00 USD',
-        }
+        }]
       }
   */
   getDerivatives(trade_status, product_type, market_list) {
