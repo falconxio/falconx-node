@@ -177,6 +177,18 @@ const CryptoJS = require('crypto-js');
  * @property {Number} total_margin
  */
 
+/**
+ * @typedef DerivativeTradesResponse
+ * @property {DerivativeTrade[]} response
+ * @property {String} status
+ */
+
+/**
+ * @typedef DerivativeMarginsResponse
+ * @property {DerivativeMargin[]} response
+ * @property {String} status
+ */
+
 class FalconxClient {
   /**
      * Client for querying the FalconX API using http REST
@@ -606,7 +618,7 @@ class FalconxClient {
      * @param {String} trade_status {'open'|'closed'|'settled'|'defaulted'}
      * @param {String} product_type {'ndf'|'call_option'|'put_option'|'irs'|'option'}
      * @param {String} market_list: comma separated 'BTC-USD,ETH-USD'
-     * @returns {Promise<DerivativeTrade[]|FxError>}
+     * @returns {Promise<DerivativeTradeReponse|FxError>}
      * @example {
         'status': 'success',
         'response': [{
@@ -639,7 +651,7 @@ class FalconxClient {
 
   /**
      * Get total derivative margin balances per token.
-     * @returns {Promise<DerivativeMargin[]|FxError>}
+     * @returns {Promise<DerivativeMarginsResponse|FxError>}
      * @example {
         'status': 'success',
         'response': [
