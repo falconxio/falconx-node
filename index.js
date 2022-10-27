@@ -149,6 +149,46 @@ const CryptoJS = require('crypto-js');
  * @property {FxLimit} net_limits
  */
 
+/**
+ * @typedef DerivativeTrade
+ * @property {String} trade_id
+ * @property {String} status
+ * @property {String} market
+ * @property {String} trader
+ * @property {String} product
+ * @property {Number} quantity
+ * @property {String} side
+ * @property {String} type
+ * @property {String} trade_date
+ * @property {String} effective_date
+ * @property {String} fixing_expiry_time
+ * @property {String} premium
+ * @property {String} counterparty_margin
+ * @property {String} trade_notional
+ * @property {String} strike_price
+ * @property {String} daily_mark
+ * @property {String} delta
+ * @property {String} vega
+ */
+
+/**
+ * @typedef DerivativeMargin
+ * @property {String} token
+ * @property {Number} total_margin
+ */
+
+/**
+ * @typedef DerivativeTradesResponse
+ * @property {DerivativeTrade[]} response
+ * @property {String} status
+ */
+
+/**
+ * @typedef DerivativeMarginsResponse
+ * @property {DerivativeMargin[]} response
+ * @property {String} status
+ */
+
 class FalconxClient {
   /**
      * Client for querying the FalconX API using http REST
@@ -571,6 +611,62 @@ class FalconxClient {
      */
   getTradeSizes() {
     return this.makeHTTPRequest('/trade_sizes', 'get');
+  }
+
+  /**
+     * Get derivative trade information with current mtm data.
+     * @param {String} trade_status {'open'|'closed'|'settled'|'defaulted'}
+     * @param {String} product_type {'ndf'|'call_option'|'put_option'|'irs'|'option'}
+     * @param {String} market_list: comma separated 'BTC-USD,ETH-USD'
+     * @returns {Promise<DerivativeTradeReponse|FxError>}
+     * @example {
+        'status': 'success',
+        'response': [{
+          trade_id: '12a29e52cfe745c4a4ee556f372ebce2',
+          status: 'open',
+          market: 'ETH - USD',
+          trader: 'will@client.com',
+          product: 'OPTION',
+          quantity: 500,
+          side: 'Sell',
+          type: 'Put',
+          trade_date: '09/08/2022 1:56 PM ET',
+          effective_date: '09/12/2022',
+          maturity_date: '11/18/2022',
+          fixing_expiry_time: '4pm NYC',
+          premium: '100,000.00 USD',
+          counterparty_margin: '15.00001% USD',
+          trade_notional: '800,000.00 USD',
+          strike_price: '2,000.00 USD',
+          daily_mark: '-2.00 USD',
+          delta: '-262.00',
+          vega: '-272.00 USD',
+        }]
+      }
+  */
+  getDerivatives(trade_status, product_type, market_list) {
+    const params = { trade_status, product_type, market_list };
+    return this.makeHTTPRequest('/derivatives', 'get', params);
+  }
+
+  /**
+     * Get total derivative margin balances per token.
+     * @returns {Promise<DerivativeMarginsResponse|FxError>}
+     * @example {
+        'status': 'success',
+        'response': [
+          {
+            token: 'BTC',
+            total_margin: 10.3
+          }, {
+            token: 'ETH'
+            total_margin: 32.1
+          }
+        ]
+      }
+  */
+  getDerivativeMargins() {
+    return this.makeHTTPRequest('/derivatives/margins', 'get', {});
   }
 
   /**
