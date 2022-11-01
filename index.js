@@ -156,7 +156,6 @@ const CryptoJS = require('crypto-js');
  * @property {Number} delta
  * @property {String} effective_date
  * @property {String} fixing_expiry_time
- * @property {String} market
  * @property {String} maturity_date
  * @property {String} option_type
  * @property {Token} premium
@@ -166,6 +165,7 @@ const CryptoJS = require('crypto-js');
  * @property {String} status
  * @property {Token} spot_reference_price
  * @property {Token} strike_price
+ * @property {TokenPair} token_pair
  * @property {String} trade_date
  * @property {String} trade_id
  * @property {Token} trade_notional
@@ -609,7 +609,7 @@ class FalconxClient {
      * @param {String} trade_status {'open'|'closed'|'settled'|'defaulted'}
      * @param {String} product_type {'ndf'|'call_option'|'put_option'|'irs'|'option'}
      * @param {String} market_list: comma separated 'BTC-USD,ETH-USD'
-     * @returns {Promise<DerivataveTrade[]|FxError>}
+     * @returns {Promise<DerivativeTrade[]|FxError>}
      * @example : [
             {
                 counterparty_margin_percent: {
@@ -623,24 +623,27 @@ class FalconxClient {
                 delta: -262.0,
                 effective_date: null,
                 fixing_expiry_time: "4pm NYC",
-                market: "BTC/USD",
                 maturity_date: "2022-02-26T00:00:00+00:00",
                 option_type: "put",
                 premium: {
-                    token: "USD",
-                    value: 100000.00
+                  token: "USD",
+                  value: 100000.00
                 },
                 product: "option",
                 quantity: 100.0,
                 side: "sell",
                 status: "open",
                 spot_reference_price: {
-                    token: "USD",
-                    value: 20010.0
+                  token: "USD",
+                  value: 20010.0
                 },
                 strike_price: {
-                    token: "USD",
-                    value: 20000.0
+                  token: "USD",
+                  value: 20000.0
+                },
+                token_pair: {
+                  base_token: "BTC",
+                  quote_token: "USD"
                 },
                 trade_date: "2022-02-26T00:03:00+00:00",
                 trade_id: "13db3a3f832e444a90435e900d1c3222",
@@ -667,10 +670,10 @@ class FalconxClient {
      * @returns {Promise<DerivativeMargin[]|FxError>}
      * @example : [
             {
-                token: "BTC',
+                token: "BTC",
                 total_margin: 10.3
             }, {
-                token: 'ETH'
+                token: "ETH"
                 total_margin: 32.1
             }
         ]
