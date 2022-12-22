@@ -1,6 +1,3 @@
-// process.env.DEBUG="*"
-var env = "prod"
-
 
 apiKey = '***'
 passphrase = '***'
@@ -8,10 +5,8 @@ secretKey = '***'
 
 const socketio = require('socket.io-client'); // socket.io-client@2.5.0 
 const CryptoJS = require('crypto-js'); // crypto-js@4.1.1 
-let url = {
-    prod: "https://ws.falconx.io",
-    stage: "https://ws-stage.falconx.io"
-}[env]
+let url = "https://ws.falconx.io"
+
 
 class FXClient{
     constructor(namespace, apiKey, passphrase, secretKey, onConnectCallback){
@@ -111,10 +106,10 @@ var fxStreamingClient = new FXClient('streaming', apiKey, passphrase, secretKey,
     });
         
     client.addListener('response', msg => {
-        subscription_res_time = new Date().getTime()
+        console.log(msg)
     });
     client.addListener('subscription_success', msg => {
-        subscription_res_time = new Date().getTime()
+        console.log(msg)
     });
 });
 
