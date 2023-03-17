@@ -56,6 +56,8 @@ const CryptoJS = require('crypto-js');
  * @property {String} timeInForce - The time in force value
  * @property {Number} limitPrice - Price to execute the limit order at
  * @property {String} slippageBps - Only required for FOK orders
+ * @property {String} clientOrderId 
+ * @property {String} clientOrderUuid
  */
 
 /**
@@ -74,6 +76,7 @@ const CryptoJS = require('crypto-js');
  * @property {String} price_executed
  * @property {String} t_execute
  * @property {String} client_order_id
+ * @property {String} client_order_uuid
  * @property {String} platform
  * @property {Number} gross_fee_bps
  * @property {Number} gross_fee_usd
@@ -376,6 +379,7 @@ class FalconxClient {
       limit_price: opts.limitPrice,
       slippage_bps: opts.slippageBps,
       client_order_id: opts.clientOrderId,
+      client_order_uuid: opts.clientOrderUuid,
     };
     return this.makeHTTPRequest('/order', 'post', params);
   }
@@ -433,7 +437,6 @@ class FalconxClient {
             "side_requested": "buy",
             "t_quote": "2019-06-27T11:59:21.875725+00:00",
             "t_expiry": "2019-06-27T11:59:22.875725+00:00",
-
             "is_filled": false,
             "side_executed": null,
             "price_executed": null,
@@ -444,6 +447,40 @@ class FalconxClient {
   getQuoteStatus(fxQuoteId) {
     return this.makeHTTPRequest(`/quotes/${fxQuoteId}`, 'get');
   }
+
+  /**
+     * Check the status of a quote/order by uuid.
+     * @async
+     * @param {String} clientOrderUuid - the quote id received via get_quote
+     * @returns {Promise<FxQuote|FxError>}
+     * @example : {
+            "status": "success",
+            "fx_quote_id": "00c884b056f949338788dfb59e495377",
+            "buy_price": 12650,
+            "sell_price": null,
+            "platform": "api",
+            "token_pair": {
+            "base_token": "BTC",
+            "quote_token": "USD"
+            },
+            "quantity_requested": {
+            "token": "BTC",
+            "value": "10"
+            },
+            "side_requested": "buy",
+            "t_quote": "2019-06-27T11:59:21.875725+00:00",
+            "t_expiry": "2019-06-27T11:59:22.875725+00:00",
+            "is_filled": false,
+            "side_executed": null,
+            "price_executed": null,
+            "t_execute": null,
+            "trader_email": "trader1@company.com"
+            "client_order_uuid": "4663e20-c6e0-4dd7-8aa4"
+        }
+     */
+    getQuoteByUuid(clientOrderUuid) {
+        return this.makeHTTPRequest(`/quotes/client_order_uuid/${clientOrderUuid}`, 'get');
+        }
 
   /**
      * Get a historical record of executed quotes in the time range.
@@ -458,7 +495,6 @@ class FalconxClient {
         't_execute': '2019-07-03T14:02:56.539710+00:00', 't_expiry': '2019-07-03T14:03:02.038093+00:00',
         't_quote': '2019-07-03T14:02:52.038087+00:00',
         'token_pair': {'base_token': 'ETH', 'quote_token': 'USD'}, 'trader_email': 'trader1@company.com'},
-
         {'buy_price': 293.1, 'error': None, 'fx_quote_id': 'fc17a0d884444a0db5a7d9568c6c3f70',
         'is_filled': True, 'price_executed': 293.03, 'platform': 'api', 'quantity_requested': {'token': 'ETH', 'value': '0.10000'},
         'sell_price': 293.03, 'side_executed': 'sell', 'side_requested': 'two_way', 'status': 'success',
@@ -501,7 +537,6 @@ class FalconxClient {
                 "quantity": 1.0,
                 "t_create": "2019-06-20T01:01:01+00:00"
             },
-
             {
                 "type": "withdrawal",
                 "platform": "midas",
