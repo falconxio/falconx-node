@@ -240,7 +240,8 @@ class FalconxClient {
   }
 
   /* eslint-disable prefer-promise-reject-errors */
-  makeHTTPRequest(url, method, params = null) {
+  makeHTTPRequest(url, method, params = null, v3 = false) {
+    url = (v3 ? '/v3' : '/v1') + url;
     return this.client({
       url,
       method,
@@ -383,8 +384,7 @@ class FalconxClient {
       client_order_id: opts.clientOrderId,
       client_order_uuid: opts.clientOrderUuid,
     };
-    const url = (v3 ? '/v3' : '/v1') + '/order';
-    return this.makeHTTPRequest(url, 'post', params, v3);
+    return this.makeHTTPRequest('/order', 'post', params, v3);
   }
 
   /**
