@@ -184,8 +184,7 @@ const CryptoJS = require('crypto-js');
  */
 
 class FalconxClient {
-  V1_URL = 'https://api.falconx.io/v1/';
-  V3_URL = 'https://api.falconx.io/v3/';
+  HOST = 'https://api.falconx.io/';
 
   /**
      * Client for querying the FalconX API using http REST
@@ -196,13 +195,12 @@ class FalconxClient {
      * @param {String} passphrase
      * @param {String} url - URL of FalconX REST API
      */
-  constructor(apiKey, secretKey, passphrase, url = V1_URL) {
+  constructor(apiKey, secretKey, passphrase, url = HOST) {
     this.apiKey = apiKey;
     this.secretKey = secretKey;
     this.passphrase = passphrase;
     this.url = url;
     this.client = axios.create({ baseURL: url, headers: { 'Content-Type': 'application/json' } });
-    this.v3Client = axios.create({ baseURL: this.V3_URL, headers: { 'Content-Type': 'application/json' } });
 
     if (!apiKey || !secretKey || !passphrase) {
       throw Promise.reject(new Error('One or more of API Key/Passphrase/Secret Key is missing'));
@@ -211,7 +209,7 @@ class FalconxClient {
     this.client.interceptors.request.use(
       (config) => {
         const timestamp = new Date().getTime() / 1000;
-        const pathUrl = `/v1${config.url}`;
+        const pathUrl = `${config.url}`;
         let baseMessage = timestamp + config.method.toUpperCase() + pathUrl;
         if (config.method === 'post' || Object.keys(config.data || {}).length > 0) {
           baseMessage += JSON.stringify(config.data);
@@ -242,9 +240,8 @@ class FalconxClient {
   }
 
   /* eslint-disable prefer-promise-reject-errors */
-  makeHTTPRequest(url, method, params = null, v3 = false) {
-    client = v3 ? this.v3Client : this.client
-    return client({
+  makeHTTPRequest(url, method, params = null) {
+    return this.client({
       url,
       method,
       data: params,
@@ -386,7 +383,8 @@ class FalconxClient {
       client_order_id: opts.clientOrderId,
       client_order_uuid: opts.clientOrderUuid,
     };
-    return this.makeHTTPRequest('/order', 'post', params);
+    const url = (v3 ? '/v3' : '/v1') + '/order';
+    return this.makeHTTPRequest(url, 'post', params, v3);
   }
 
   /**
