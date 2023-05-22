@@ -184,6 +184,9 @@ const CryptoJS = require('crypto-js');
  */
 
 class FalconxClient {
+  V1_URL = 'https://api.falconx.io/v1/';
+  V3_URL = 'https://api.falconx.io/v3/';
+
   /**
      * Client for querying the FalconX API using http REST
      *
@@ -193,12 +196,13 @@ class FalconxClient {
      * @param {String} passphrase
      * @param {String} url - URL of FalconX REST API
      */
-  constructor(apiKey, secretKey, passphrase, url = 'https://api.falconx.io/v1/') {
+  constructor(apiKey, secretKey, passphrase, url = V1_URL) {
     this.apiKey = apiKey;
     this.secretKey = secretKey;
     this.passphrase = passphrase;
     this.url = url;
     this.client = axios.create({ baseURL: url, headers: { 'Content-Type': 'application/json' } });
+    this.v3Client = axios.create({ baseURL: this.V3_URL, headers: { 'Content-Type': 'application/json' } });
 
     if (!apiKey || !secretKey || !passphrase) {
       throw Promise.reject(new Error('One or more of API Key/Passphrase/Secret Key is missing'));
@@ -238,8 +242,9 @@ class FalconxClient {
   }
 
   /* eslint-disable prefer-promise-reject-errors */
-  makeHTTPRequest(url, method, params = null) {
-    return this.client({
+  makeHTTPRequest(url, method, params = null, v3 = false) {
+    client = v3 ? this.v3Client : this.client
+    return client({
       url,
       method,
       data: params,
@@ -363,7 +368,7 @@ class FalconxClient {
             "client_order_id": "d6f3e1fa-e148-4009-9c07-a87f9ae78d1a"
         }
      */
-  placeOrder(base, quote, quantity, side, orderType, opts) {
+  placeOrder(base, quote, quantity, side, orderType, opts, v3 = false) {
     const params = {
       token_pair: {
         base_token: base,
@@ -371,7 +376,7 @@ class FalconxClient {
       },
       quantity: {
         token: base,
-        value: quantity.toString(),
+        value: v3 ? parseFloat(quantity.toString()) : quantity.toString(),
       },
       side,
       order_type: orderType,
