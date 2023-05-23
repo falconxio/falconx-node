@@ -184,6 +184,8 @@ const CryptoJS = require('crypto-js');
  */
 
 class FalconxClient {
+  HOST = 'https://api.falconx.io/';
+
   /**
      * Client for querying the FalconX API using http REST
      *
@@ -193,7 +195,7 @@ class FalconxClient {
      * @param {String} passphrase
      * @param {String} url - URL of FalconX REST API
      */
-  constructor(apiKey, secretKey, passphrase, url = 'https://api.falconx.io/v1/') {
+  constructor(apiKey, secretKey, passphrase, url = HOST) {
     this.apiKey = apiKey;
     this.secretKey = secretKey;
     this.passphrase = passphrase;
@@ -207,7 +209,7 @@ class FalconxClient {
     this.client.interceptors.request.use(
       (config) => {
         const timestamp = new Date().getTime() / 1000;
-        const pathUrl = `/v1${config.url}`;
+        const pathUrl = `${config.url}`;
         let baseMessage = timestamp + config.method.toUpperCase() + pathUrl;
         if (config.method === 'post' || Object.keys(config.data || {}).length > 0) {
           baseMessage += JSON.stringify(config.data);
@@ -238,7 +240,8 @@ class FalconxClient {
   }
 
   /* eslint-disable prefer-promise-reject-errors */
-  makeHTTPRequest(url, method, params = null) {
+  makeHTTPRequest(url, method, params = null, v3 = false) {
+    url = (v3 ? '/v3' : '/v1') + url;
     return this.client({
       url,
       method,
@@ -363,7 +366,7 @@ class FalconxClient {
             "client_order_id": "d6f3e1fa-e148-4009-9c07-a87f9ae78d1a"
         }
      */
-  placeOrder(base, quote, quantity, side, orderType, opts) {
+  placeOrder(base, quote, quantity, side, orderType, opts, v3 = false) {
     const params = {
       token_pair: {
         base_token: base,
@@ -371,7 +374,7 @@ class FalconxClient {
       },
       quantity: {
         token: base,
-        value: quantity.toString(),
+        value: v3 ? parseFloat(quantity.toString()) : quantity.toString(),
       },
       side,
       order_type: orderType,
@@ -381,7 +384,7 @@ class FalconxClient {
       client_order_id: opts.clientOrderId,
       client_order_uuid: opts.clientOrderUuid,
     };
-    return this.makeHTTPRequest('/order', 'post', params);
+    return this.makeHTTPRequest('/order', 'post', params, v3);
   }
 
   /**
