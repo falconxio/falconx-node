@@ -4,7 +4,7 @@
   "description": "REST client for FalconX APIs",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha test",
     "test:setup": "cp test/config.sample.json test/config.json && echo '\n  Add your falconx creds to test/config.json\n\n'",
     "lint": "eslint index.js --fix"
   },
@@ -27,6 +27,8 @@
     "eslint-config-airbnb": "^18.2.0",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-jsx-a11y": "^6.3.1",
-    "eslint-plugin-react": "^7.20.5"
+    "eslint-plugin-react": "^7.20.5",
+    "mocha": "^10.2.0",
+    "should": "^13.2.3"
   }
 }
