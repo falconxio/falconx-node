@@ -42,10 +42,8 @@ options = {
     client_order_id: '<some client order id>'
 }
 
-fxClient.placeOrder('ETH', 'USD', 0.1, 'sell', 'market', options, v3=true).then(quote => {
-    fxClient.executeQuote(quote.fx_quote_id, 'sell').then(executedQuote => {
-        console.log(executedQuote);
-    });
+fxClient.placeOrder('ETH', 'USD', 0.1, 'sell', 'market', options, v3=true).then(response => {
+     console.log(response);
 });
 ```
 
