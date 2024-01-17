@@ -1,6 +1,6 @@
 {
   "name": "falconx-node",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "REST client for FalconX APIs",
   "main": "index.js",
   "scripts": {
