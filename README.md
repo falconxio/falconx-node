@@ -27,11 +27,11 @@ fxClient.getQuote('ETH', 'USD', 0.1, 'two_way').then(quote => {
 });
 ```
 
-## New Order Endpoint
-A new faster endpoint is now available to place orders.
-The same can be used as mentioned in the below sample.
-Optional argument 'v3'. 
-If the argument is not passed, the old order (v1/order) endpoint is used.
+## Latest Update
+
+All the trading requests will default to the new faster endpoint.
+The v3 flasg introduced earlier has been removed and should not be passed in the request (see sample below)
+
 
 ```javascript
 import FalconxClient from 'falconx-node';
@@ -42,7 +42,7 @@ options = {
     client_order_id: '<some client order id>'
 }
 
-fxClient.placeOrder('ETH', 'USD', 0.1, 'sell', 'market', options, v3=true).then(response => {
+fxClient.placeOrder('ETH', 'USD', 0.1, 'sell', 'market', options).then(response => {
      console.log(response);
 });
 ```
