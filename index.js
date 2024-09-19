@@ -240,8 +240,8 @@ class FalconxClient {
   }
 
   /* eslint-disable prefer-promise-reject-errors */
-  makeHTTPRequest(url, method, params = null, v3 = false) {
-    url = (v3 ? '/v3' : '/v1') + url;
+  makeHTTPRequest(url, method, params = null, trading = false) {
+    url = (trading ? '/v3' : '/v1') + url;
     return this.client({
       url,
       method,
@@ -301,7 +301,7 @@ class FalconxClient {
             "client_order_id": "d6f3e1fa-e148-4009-9c07-a87f9ae78d1a"
         }
      */
-  getQuote(base, quote, quantity, side, clientOrderId = null, v3 = false) {
+  getQuote(base, quote, quantity, side, clientOrderId = null) {
     const params = {
       token_pair: {
         base_token: base,
@@ -309,13 +309,13 @@ class FalconxClient {
       },
       quantity: {
         token: base,
-        value: quantity,
+        value: parseFloat(quantity.toString()),
       },
       side,
       client_order_id: clientOrderId,
     };
 
-    return this.makeHTTPRequest('/quotes', 'post', params, v3=v3);
+    return this.makeHTTPRequest('/quotes', 'post', params, true);
   }
 
   /**
@@ -367,7 +367,7 @@ class FalconxClient {
             "client_order_id": "d6f3e1fa-e148-4009-9c07-a87f9ae78d1a"
         }
      */
-  placeOrder(base, quote, quantity, side, orderType, opts, v3 = false) {
+  placeOrder(base, quote, quantity, side, orderType, opts) {
     const params = {
       token_pair: {
         base_token: base,
@@ -375,7 +375,7 @@ class FalconxClient {
       },
       quantity: {
         token: base,
-        value: v3 ? parseFloat(quantity.toString()) : quantity.toString(),
+        value: parseFloat(quantity.toString()),
       },
       side,
       order_type: orderType,
@@ -385,7 +385,7 @@ class FalconxClient {
       client_order_id: opts.clientOrderId,
       client_order_uuid: opts.clientOrderUuid,
     };
-    return this.makeHTTPRequest('/order', 'post', params, v3);
+    return this.makeHTTPRequest('/order', 'post', params, true);
   }
 
   /**
@@ -411,12 +411,12 @@ class FalconxClient {
             'token_pair': {'base_token': 'ETH', 'quote_token': 'USD'}
         }
      */
-  executeQuote(fxQuoteId, side, v3 = false) {
+  executeQuote(fxQuoteId, side) {
     const params = {
       fx_quote_id: fxQuoteId,
       side,
     };
-    return this.makeHTTPRequest('/quotes/execute', 'post', params, v3=v3);
+    return this.makeHTTPRequest('/quotes/execute', 'post', params, true);
   }
 
   /**
