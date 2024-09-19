@@ -240,8 +240,8 @@ class FalconxClient {
   }
 
   /* eslint-disable prefer-promise-reject-errors */
-  makeHTTPRequest(url, method, params = null, trading = false) {
-    url = (trading ? '/v3' : '/v1') + url;
+  makeHTTPRequest(url, method, params = null, v3 = false) {
+    url = (v3 ? '/v3' : '/v1') + url;
     return this.client({
       url,
       method,
