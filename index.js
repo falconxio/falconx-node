@@ -301,7 +301,7 @@ class FalconxClient {
             "client_order_id": "d6f3e1fa-e148-4009-9c07-a87f9ae78d1a"
         }
      */
-  getQuote(base, quote, quantity, side, clientOrderId = null) {
+  getQuote(base, quote, quantity, side, clientOrderId = null, v3 = false) {
     const params = {
       token_pair: {
         base_token: base,
@@ -314,7 +314,8 @@ class FalconxClient {
       side,
       client_order_id: clientOrderId,
     };
-    return this.makeHTTPRequest('/quotes', 'post', params);
+
+    return this.makeHTTPRequest('/quotes', 'post', params, v3=v3);
   }
 
   /**
@@ -410,12 +411,12 @@ class FalconxClient {
             'token_pair': {'base_token': 'ETH', 'quote_token': 'USD'}
         }
      */
-  executeQuote(fxQuoteId, side) {
+  executeQuote(fxQuoteId, side, v3 = false) {
     const params = {
       fx_quote_id: fxQuoteId,
       side,
     };
-    return this.makeHTTPRequest('/quotes/execute', 'post', params);
+    return this.makeHTTPRequest('/quotes/execute', 'post', params, v3=v3);
   }
 
   /**
