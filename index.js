@@ -605,8 +605,8 @@ class FalconxClient {
             status: 'success'
         }
      */
-  submitWithdrawalRequest(token, amount, platform) {
-    const params = { token, amount, platform };
+  submitWithdrawalRequest(token, amount, platform, label = null) {
+    const params = { token, amount, platform, label };
     return this.makeHTTPRequest('/withdraw', 'post', params);
   }
 
