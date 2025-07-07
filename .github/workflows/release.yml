@@ -37,5 +37,5 @@ jobs:
       # # Step 7: Publish the package to npm
       # - name: Publish to npm
       #   run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        # env:
+        #   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
