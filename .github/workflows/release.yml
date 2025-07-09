@@ -2,9 +2,9 @@ name: Publish falconx-node Package to npmjs
 
 # Trigger the workflow when a release is published
 on:
-  push: 
-  # release:
-  #   types: [published]
+  push:
+    branches:
+      - master
 
 jobs:
   build-and-publish:
@@ -30,12 +30,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # Step 6: Build the project
-      - name: Build the project
-        run: npm run build
-
-      # # Step 7: Publish the package to npm
+      # # # Step 7: Publish the package to npm
       # - name: Publish to npm
       #   run: npm publish
-        # env:
-        #   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      #   env:
+      #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
