@@ -3,8 +3,8 @@ name: Publish falconx-node Package to npmjs
 # Trigger the workflow when a release is published
 on:
   push:
-    branches:
-      - master
+    # branches:
+    #   - master
 
 jobs:
   build-and-publish:
