@@ -5,7 +5,9 @@ on:
   push:
     branches:
       - master
-
+permissions:
+  contents: read
+  
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
@@ -13,11 +15,11 @@ jobs:
     steps:
       # Step 1: Check out the repository code
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@09d2acae674a48949e3602304ab46fd20ae0c42f
 
       # Step 2: Setup Node.js 20.x environment and set npm registry
       - name: Setup Node.js 20.x
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@3235b876344d2a9aa001b8d1453c930bba69e610
         with:
           node-version: "20.x"
           registry-url: "https://registry.npmjs.org"
