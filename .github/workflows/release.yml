@@ -1,39 +1,35 @@
 name: Publish falconx-node Package to npmjs
 
-# Trigger the workflow when a release is published
 on:
   push:
     branches:
       - master
+
 permissions:
   contents: read
-  
+  # REQUIRED: This allows the job to request the OIDC ID token from GitHub
+  id-token: write 
+
 jobs:
   build-and-publish:
-    runs-on: ubuntu-2core  # Static IP runner
+    runs-on: ubuntu-2core
 
     steps:
-      # Step 1: Check out the repository code
       - name: Checkout code
-        uses: actions/checkout@09d2acae674a48949e3602304ab46fd20ae0c42f
+        uses: actions/checkout@v4
 
-      # Step 2: Setup Node.js 20.x environment and set npm registry
       - name: Setup Node.js 20.x
-        uses: actions/setup-node@3235b876344d2a9aa001b8d1453c930bba69e610
+        uses: actions/setup-node@v4
         with:
           node-version: "20.x"
           registry-url: "https://registry.npmjs.org"
 
-      # Step 3: Configure .npmrc to use npm token from secrets
-      - name: Setup npm authentication
-        run: echo "//registry.npmjs.org/:_authToken=\${{ secrets.NPM_TOKEN }}" > ~/.npmrc
-
-      # Step 4: Install dependencies with npm ci (optimized for CI/CD)
       - name: Install dependencies
         run: npm ci
 
-      # # # Step 7: Publish the package to npm
       - name: Publish to npm
-        run: npm publish
+        # No longer requires secrets.NPM_TOKEN!
+        # The '--provenance' flag provides a verifiable link back to this source code.
+        run: npm publish --provenance
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} # npm will prioritize OIDC if configured
