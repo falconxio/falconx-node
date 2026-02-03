@@ -29,8 +29,4 @@ jobs:
         run: npm ci
 
       - name: Publish to npm
-        # No longer requires secrets.NPM_TOKEN!
-        # The '--provenance' flag provides a verifiable link back to this source code.
-        run: npm publish --provenance
-#        env:
-#          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} # npm will prioritize OIDC if configured
+        run: npm publish --provenance --access public
