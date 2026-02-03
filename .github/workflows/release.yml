@@ -32,5 +32,5 @@ jobs:
         # No longer requires secrets.NPM_TOKEN!
         # The '--provenance' flag provides a verifiable link back to this source code.
         run: npm publish --provenance
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} # npm will prioritize OIDC if configured
+#        env:
+#          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} # npm will prioritize OIDC if configured
