@@ -1,6 +1,8 @@
 const axios = require('axios');
 const CryptoJS = require('crypto-js');
 
+const API_HOST = 'https://api.falconx.io/';
+
 /**
  * @typedef TokenPair
  * @property {String} base_token
@@ -184,7 +186,7 @@ const CryptoJS = require('crypto-js');
  */
 
 class FalconxClient {
-  HOST = 'https://api.falconx.io/';
+  HOST = API_HOST;
 
   /**
      * Client for querying the FalconX API using http REST
@@ -195,7 +197,7 @@ class FalconxClient {
      * @param {String} passphrase
      * @param {String} url - URL of FalconX REST API
      */
-  constructor(apiKey, secretKey, passphrase, url = HOST) {
+  constructor(apiKey, secretKey, passphrase, url = API_HOST) {
     this.apiKey = apiKey;
     this.secretKey = secretKey;
     this.passphrase = passphrase;
@@ -203,7 +205,7 @@ class FalconxClient {
     this.client = axios.create({ baseURL: url, headers: { 'Content-Type': 'application/json' } });
 
     if (!apiKey || !secretKey || !passphrase) {
-      throw Promise.reject(new Error('One or more of API Key/Passphrase/Secret Key is missing'));
+      throw new Error('One or more of API Key/Passphrase/Secret Key is missing');
     }
 
     this.client.interceptors.request.use(
@@ -233,9 +235,7 @@ class FalconxClient {
           },
         };
       },
-      (error) => {
-        Promise.reject(error);
-      },
+      (error) => Promise.reject(error),
     );
   }
 
@@ -248,11 +248,14 @@ class FalconxClient {
       data: params,
     })
       .then(({ data }) => data)
-      .catch((error) => Promise.reject({
-        status: error.response.status,
-        statusText: error.response.statusText,
-        message: error.response.data.message,
-      }));
+      .catch((error) => {
+        const response = error.response;
+        return Promise.reject({
+          status: response?.status ?? 0,
+          statusText: response?.statusText ?? '',
+          message: response?.data?.message ?? error.message,
+        });
+      });
   }
   /* eslint-enable prefer-promise-reject-errors */
 
